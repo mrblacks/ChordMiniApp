@@ -55,20 +55,22 @@ class BTCSLDetectorService:
                     return False
 
             # Check for actual files we ship
-            config_path = config_dir / "btc_config.yaml"
+            config_path = config_dir / "ChordMini.yaml"
             checkpoint_path = checkpoints_dir / "SL" / "btc_model_large_voca.pt"
             if not config_path.exists():
-                log_debug(f"BTC-SL config not found: {config_path}")
+                log_error(f"BTC-SL config not found: {config_path}")
                 self._available = False
                 return False
             if not checkpoint_path.exists():
-                log_debug(f"BTC-SL checkpoint not found: {checkpoint_path}")
+                log_error(f"BTC-SL checkpoint not found: {checkpoint_path}")
                 self._available = False
                 return False
 
             # Try to import prerequisites and our btc wrapper
             try:
                 import torch  # noqa: F401
+                if str(self.model_dir) not in sys.path:
+                    sys.path.insert(0, str(self.model_dir))
                 from btc_chord_recognition import btc_chord_recognition  # noqa: F401
             except Exception as e:
                 log_error(f"BTC-SL import check failed: {e}")
@@ -203,7 +205,7 @@ class BTCSLDetectorService:
                 for line in f:
                     line = line.strip()
                     if line:
-                        parts = line.split('\t')
+                        parts = line.split()
                         if len(parts) >= 3:
                             start_time = float(parts[0])
                             end_time = float(parts[1])
