@@ -1,0 +1,2 @@
+[build]
+dockerfilePath = "python_backend/Dockerfile"
