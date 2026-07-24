@@ -1,2 +1,4 @@
 [build]
+builder = "DOCKERFILE"
 dockerfilePath = "python_backend/Dockerfile"
+buildContext = "python_backend"
